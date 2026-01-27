@@ -29,6 +29,11 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact" class="btn-nav">Contact</a></li>
+                <li class="theme-switch-wrapper">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </li>
             </ul>
             <div class="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -38,9 +43,11 @@
 
     <!-- Hero Section -->
     <header class="hero" id="home">
-        <div class="container hero-content">
+        <canvas id="hero-canvas"></canvas> <!-- Added Canvas -->
+        <div class="container hero-content animate-on-scroll">
             <h1 class="hero-title">Vedansh Gupta</h1>
-            <p class="hero-subtitle">CSE Student | Java, DSA & Cloud Computing Enthusiast</p>
+            <p class="hero-subtitle"><span id="typing-text"></span><span class="cursor">|</span></p>
+            <!-- Typed text container -->
             <div class="hero-buttons">
                 <a href="#projects" class="btn btn-primary">View Projects</a>
                 <a href="#contact" class="btn btn-secondary">Contact Me</a>
@@ -50,7 +57,7 @@
     </header>
 
     <!-- About Section -->
-    <section id="about" class="section">
+    <section id="about" class="section animate-on-scroll">
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
@@ -63,7 +70,7 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section bg-light">
+    <section id="skills" class="section bg-light animate-on-scroll">
         <div class="container">
             <h2 class="section-title">Skills</h2>
             <div class="skills-wrapper">
@@ -79,7 +86,7 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section">
+    <section id="projects" class="section animate-on-scroll">
         <div class="container">
             <h2 class="section-title">Projects</h2>
             <div class="projects-grid">
@@ -115,7 +122,7 @@
     </section>
 
     <!-- Education Section -->
-    <section id="education" class="section bg-light">
+    <section id="education" class="section bg-light animate-on-scroll">
         <div class="container">
             <h2 class="section-title">Education</h2>
             <div class="education-card">
@@ -129,7 +136,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section">
+    <section id="contact" class="section animate-on-scroll">
         <div class="container">
             <h2 class="section-title">Contact Me</h2>
             <div class="contact-grid">
