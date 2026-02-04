@@ -3,14 +3,15 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 8px;
-    /* Slightly larger for better visibility */
-    height: 8px;
-    background-color: var(--primary-color);
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff;
+    /* Pure White */
     border-radius: 50%;
     z-index: 9999;
     pointer-events: none;
-    /* Removed translate here as it's handled in JS */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    /* Glow */
 }
 
 .cursor-outline {
@@ -19,8 +20,8 @@
     left: 0;
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    /* Semi-transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Strong White Outline */
     border-radius: 50%;
     z-index: 9998;
     pointer-events: none;
@@ -30,11 +31,11 @@
 
 /* Hover effect for links and buttons */
 body.hovering .cursor-outline {
-    width: 60px;
+    width: 70px;
     /* Larger scale */
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: transparent;
+    height: 70px;
+    background-color: transparent;
+    border-color: #ffffff;
     border-width: 2px;
 }
 

@@ -96,57 +96,58 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.outputEncoding = THREE.sRGBEncoding;
         canvasContainer.appendChild(renderer.domElement);
 
-        // --- 1. The Tech Sculpture (Torus Knot) ---
-        const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 150, 20);
+        // --- 1. The Tech Sculpture (Black Obsidian) ---
+        const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 200, 32); // Higher detail
 
-        // Liquid/Glass Material
+        // Liquid Black / Obsidian Material
         const material = new THREE.MeshPhysicalMaterial({
-            color: 0x3b82f6,      // Blue-ish base
-            metalness: 0.9,       // Very metallic
-            roughness: 0.1,       // Very smooth
-            transmission: 0.0,    // Solid metal
-            clearcoat: 1.0,       // High polish
+            color: 0x050505,      // Almost Pure Black
+            metalness: 1.0,       // Full Metal
+            roughness: 0.1,       // Very Shiny
+            clearcoat: 1.0,       // Wet look
             clearcoatRoughness: 0.0,
-            emissive: 0x1e1b4b,   // Slight deep glow
-            emissiveIntensity: 0.2
+            reflectivity: 1.0,
+            envMapIntensity: 1.0
         });
 
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        // --- 2. Wireframe Overlay (Tech Feel) ---
-        const wireGeo = new THREE.TorusKnotGeometry(1.21, 0.41, 150, 20); // Slightly larger
+        // --- 2. Wireframe Overlay (Subtle Tech Detail) ---
+        const wireGeo = new THREE.TorusKnotGeometry(1.21, 0.41, 150, 20);
         const wireMat = new THREE.MeshBasicMaterial({
-            color: 0x22d3ee, // Cyan Neon
+            color: 0xffffff, // White wireframe
             wireframe: true,
             transparent: true,
-            opacity: 0.1
+            opacity: 0.03 // Very subtle
         });
         const wireMesh = new THREE.Mesh(wireGeo, wireMat);
         scene.add(wireMesh);
 
-        // --- 3. Lighting (Cinematic) ---
-        const ambientLight = new THREE.AmbientLight(0x020617, 1.0);
+        // --- 3. Lighting (High Contrast for Black Object) ---
+        const ambientLight = new THREE.AmbientLight(0x000000, 0.0); // No ambient, only reflections
         scene.add(ambientLight);
 
-        // Main Key Light (Blue/Violet)
-        const spotLight = new THREE.SpotLight(0x8b5cf6, 10);
-        spotLight.position.set(5, 10, 5);
-        spotLight.angle = Math.PI / 4;
-        spotLight.penumbra = 0.5;
-        scene.add(spotLight);
+        // Rim Light 1 (Cool White) - Left
+        const rimLight1 = new THREE.SpotLight(0xffffff, 15);
+        rimLight1.position.set(-10, 10, 5);
+        rimLight1.angle = Math.PI / 6;
+        rimLight1.penumbra = 0.5;
+        scene.add(rimLight1);
 
-        // Rim Light (Cyan)
-        const rimLight = new THREE.PointLight(0x22d3ee, 5);
-        rimLight.position.set(-5, 5, -5);
-        scene.add(rimLight);
+        // Rim Light 2 (Warm Silver) - Right
+        const rimLight2 = new THREE.SpotLight(0xe2e8f0, 10);
+        rimLight2.position.set(10, -5, 5);
+        rimLight2.angle = Math.PI / 6;
+        rimLight2.penumbra = 0.5;
+        scene.add(rimLight2);
 
-        // Fill Light (Pink)
-        const fillLight = new THREE.PointLight(0xec4899, 2);
-        fillLight.position.set(0, -5, 5);
-        scene.add(fillLight);
+        // Top Light (Highlight curves)
+        const topLight = new THREE.PointLight(0xffffff, 2);
+        topLight.position.set(0, 10, 0);
+        scene.add(topLight);
 
-        // Camera Positioning (Look slightly right)
+        // Camera Positioning
         camera.position.z = 6;
 
         // Adjust object position based on screen width

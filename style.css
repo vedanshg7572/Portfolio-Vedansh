@@ -172,7 +172,8 @@ button {
     overflow: hidden;
     padding-top: 0;
     /* Center vertically specifically */
-    background: radial-gradient(circle at 70% 50%, #1e1b4b 0%, #020617 50%, #000000 100%);
+    background: #000000;
+    /* Pure Black Background */
 }
 
 #canvas-container {
