@@ -1,0 +1,53 @@
+/* Custom Cursor */
+.cursor-dot {
+    width: 5px;
+    height: 5px;
+    background-color: var(--primary-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.cursor-outline {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--primary-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9998;
+    pointer-events: none;
+    transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Hover effect for links and buttons */
+body.hovering .cursor-outline {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(37, 99, 235, 0.1);
+    border-color: transparent;
+}
+
+/* Dark mode adjustments for cursor */
+.dark-mode .cursor-dot {
+    background-color: var(--secondary-color);
+}
+
+.dark-mode .cursor-outline {
+    border-color: var(--secondary-color);
+}
+
+/* Hide on touch devices */
+@media (max-width: 768px) {
+
+    .cursor-dot,
+    .cursor-outline {
+        display: none;
+    }
+}

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cursor.css">
 </head>
 
 <body>
@@ -43,14 +44,16 @@
 
     <!-- Hero Section -->
     <header class="hero" id="home">
-        <canvas id="hero-canvas"></canvas> <!-- Added Canvas -->
+        <div id="canvas-container"></div> <!-- 3D Container -->
         <div class="container hero-content animate-on-scroll">
-            <h1 class="hero-title">Vedansh Gupta</h1>
-            <p class="hero-subtitle"><span id="typing-text"></span><span class="cursor">|</span></p>
-            <!-- Typed text container -->
+            <h1 class="hero-title">Hi, I'm Vedansh Gupta</h1>
+            <h2 class="hero-subtitle">CSE Student | Aspiring Software Engineer | Tech Enthusiast</h2>
+            <p class="hero-description">
+                Passionate about coding, problem-solving, and building modern web experiences.
+            </p>
             <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">View Projects</a>
-                <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                <a href="#projects" class="btn btn-primary magnet-effect">View Portfolio</a>
+                <a href="#contact" class="btn btn-secondary magnet-effect">Contact Me</a>
             </div>
         </div>
         <div class="hero-overlay"></div>
@@ -168,6 +171,11 @@
         </div>
     </footer>
 
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="script.js"></script>
 </body>
 
