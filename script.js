@@ -97,128 +97,127 @@ document.addEventListener('DOMContentLoaded', () => {
         canvasContainer.appendChild(renderer.domElement);
 
         // --- 1. The Tech Sculpture (Black Obsidian) ---
-        const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 200, 32); // Higher detail
+        /* =========================================
+           3D Fullscreen Background - Dark Particle Sea
+           ========================================= */
+        const canvasContainer = document.getElementById('canvas-container');
+        if (canvasContainer) {
+            // Scene setup
+            const scene = new THREE.Scene();
+            // Deep Black Fog to blend distance
+            scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
-        // Liquid Black / Obsidian Material
-        const material = new THREE.MeshPhysicalMaterial({
-            color: 0x050505,      // Almost Pure Black
-            metalness: 1.0,       // Full Metal
-            roughness: 0.1,       // Very Shiny
-            clearcoat: 1.0,       // Wet look
-            clearcoatRoughness: 0.0,
-            reflectivity: 1.0,
-            envMapIntensity: 1.0
-        });
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+            camera.position.z = 1000;
+            camera.position.y = 200; // Elevated view
 
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false }); // Antialias off for performance
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            canvasContainer.appendChild(renderer.domElement);
 
-        // --- 2. Wireframe Overlay (Subtle Tech Detail) ---
-        const wireGeo = new THREE.TorusKnotGeometry(1.21, 0.41, 150, 20);
-        const wireMat = new THREE.MeshBasicMaterial({
-            color: 0xffffff, // White wireframe
-            wireframe: true,
-            transparent: true,
-            opacity: 0.03 // Very subtle
-        });
-        const wireMesh = new THREE.Mesh(wireGeo, wireMat);
-        scene.add(wireMesh);
+            // --- Particle Sea ---
+            const particleCount = 2000; // High count for density
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const scales = new Float32Array(particleCount);
 
-        // --- 3. Lighting (High Contrast for Black Object) ---
-        const ambientLight = new THREE.AmbientLight(0x000000, 0.0); // No ambient, only reflections
-        scene.add(ambientLight);
+            // Separation variables
+            const sepX = 80;
+            const sepZ = 80;
 
-        // Rim Light 1 (Cool White) - Left
-        const rimLight1 = new THREE.SpotLight(0xffffff, 15);
-        rimLight1.position.set(-10, 10, 5);
-        rimLight1.angle = Math.PI / 6;
-        rimLight1.penumbra = 0.5;
-        scene.add(rimLight1);
+            let i = 0;
+            // Create a grid of particles
+            // Approx 45x45 grid = ~2000 points.
 
-        // Rim Light 2 (Warm Silver) - Right
-        const rimLight2 = new THREE.SpotLight(0xe2e8f0, 10);
-        rimLight2.position.set(10, -5, 5);
-        rimLight2.angle = Math.PI / 6;
-        rimLight2.penumbra = 0.5;
-        scene.add(rimLight2);
+            for (let ix = 0; ix < 50; ix++) {
+                for (let iy = 0; iy < 50; iy++) {
+                    const x = ix * sepX - ((50 * sepX) / 2); // Center it
+                    const z = iy * sepZ - ((50 * sepZ) / 2);
+                    const y = 0;
 
-        // Top Light (Highlight curves)
-        const topLight = new THREE.PointLight(0xffffff, 2);
-        topLight.position.set(0, 10, 0);
-        scene.add(topLight);
+                    positions[i * 3] = x;
+                    positions[i * 3 + 1] = y;
+                    positions[i * 3 + 2] = z;
 
-        // Camera Positioning
-        camera.position.z = 6;
+                    scales[i] = 1;
 
-        // Adjust object position based on screen width
-        // Move object to the right for desktop, center for mobile
-        function updateLayout() {
-            if (window.innerWidth > 1024) {
-                mesh.position.x = 2.5;
-                wireMesh.position.x = 2.5;
-            } else {
-                mesh.position.x = 0;
-                wireMesh.position.x = 0;
-            }
-        }
-        updateLayout();
-
-        // Mouse Interaction
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-
-        // Window half
-        const windowHalfX = window.innerWidth / 2;
-        const windowHalfY = window.innerHeight / 2;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - windowHalfX) * 0.001;
-            mouseY = (event.clientY - windowHalfY) * 0.001;
-        });
-
-        // Animation Loop
-        const clock = new THREE.Clock();
-
-        const animate = () => {
-            const time = clock.getElapsedTime();
-
-            // Smooth mouse follow
-            targetX = mouseX * 0.5;
-            targetY = mouseY * 0.5;
-
-            // 1. Rotation (Continuous + Mouse)
-            // Main rotation
-            mesh.rotation.x += 0.002;
-            mesh.rotation.y += 0.005;
-            wireMesh.rotation.x += 0.002;
-            wireMesh.rotation.y += 0.005;
-
-            // Parallax Tilt based on mouse
-            mesh.rotation.x += (mouseY - mesh.rotation.x) * 0.05;
-            mesh.rotation.y += (mouseX - mesh.rotation.y) * 0.05;
-
-            // 2. Floating (Levitation)
-            const floatY = Math.sin(time * 0.8) * 0.2; // Move up and down
-            const baseY = 0; // Center Y
-
-            // Apply layout X position plus float
-            if (window.innerWidth > 1024) {
-                mesh.position.y = baseY + floatY;
-                wireMesh.position.y = baseY + floatY;
-            } else {
-                mesh.position.y = baseY + floatY;
-                wireMesh.position.y = baseY + floatY;
+                    i++;
+                }
             }
 
-            renderer.render(scene, camera);
-            window.requestAnimationFrame(animate);
-        };
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 
-        animate();
+            const material = new THREE.PointsMaterial({
+                color: 0xaaaaaa, // Light Gray/White
+                size: 3,
+                transparent: true,
+                opacity: 0.6,
+                sizeAttenuation: true
+            });
 
-        // Resize
+            const particles = new THREE.Points(particlesGeometry, material);
+            scene.add(particles);
+
+            // Mouse Interactivity
+            let mouseX = 0;
+            let mouseY = 0;
+            let windowHalfX = window.innerWidth / 2;
+            let windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX - windowHalfX;
+                mouseY = event.clientY - windowHalfY;
+            });
+
+            // Resize
+            window.addEventListener('resize', () => {
+                windowHalfX = window.innerWidth / 2;
+                windowHalfY = window.innerHeight / 2;
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Animation
+            let countTick = 0;
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                // Camera subtle movement
+                camera.position.x += (mouseX - camera.position.x) * 0.02;
+                camera.position.y += (-mouseY + 200 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                const positions = particles.geometry.attributes.position.array;
+
+                // Wave Logic
+                let i = 0;
+                for (let ix = 0; ix < 50; ix++) {
+                    for (let iy = 0; iy < 50; iy++) {
+                        // Sine wave based on position and time
+                        const x = ix * sepX - ((50 * sepX) / 2);
+                        const z = iy * sepZ - ((50 * sepZ) / 2);
+
+                        // Complex wave equation
+                        const y = (Math.sin((ix + countTick) * 0.3) * 50) +
+                            (Math.sin((iy + countTick) * 0.5) * 50);
+
+                        positions[i * 3 + 1] = y;
+                        i++;
+                    }
+                }
+
+                particles.geometry.attributes.position.needsUpdate = true;
+                countTick += 0.05; // Speed
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        }      // Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
