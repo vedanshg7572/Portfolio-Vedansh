@@ -172,19 +172,22 @@ button {
     overflow: hidden;
     padding-top: 0;
     /* Center vertically specifically */
-    background: #000000;
-    /* Pure Black Background */
+    background: transparent;
+    /* Changed to transparent so fixed canvas shows through */
 }
 
 #canvas-container {
-    position: absolute;
+    position: fixed;
+    /* Fix to viewport */
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    /* Behind everything */
     pointer-events: none;
-    /* Allow clicks to pass through */
+    background: #000000;
+    /* Pure Black base */
 }
 
 .hero-content {
@@ -287,6 +290,8 @@ button {
 /* Sections */
 .section {
     padding: 8rem 0;
+    position: relative;
+    z-index: 10;
 }
 
 .section-title {
@@ -311,8 +316,10 @@ button {
 
 .skill-pill {
     padding: 1rem 2rem;
-    background: var(--bg-light);
-    border: 1px solid var(--glass-border);
+    background: rgba(20, 20, 20, 0.8);
+    /* Dark Glass */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--text-light);
     font-weight: 500;
@@ -335,10 +342,10 @@ button {
 }
 
 .project-card {
-    background: rgba(30, 41, 59, 0.4);
-    /* More transparent */
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(20, 25, 40, 0.6);
+    /* Transparent Dark Blue */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     /* very subtle border */
     border-radius: 20px;
     padding: 2.5rem;
@@ -372,6 +379,7 @@ button {
     transform: translateY(-5px);
     border-color: rgba(59, 130, 246, 0.3);
     box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+    background: rgba(30, 35, 50, 0.8);
 }
 
 .project-card * {
@@ -409,8 +417,9 @@ button {
 }
 
 .contact-card {
-    background: var(--bg-light);
-    border: 1px solid var(--glass-border);
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 3rem;
     border-radius: 20px;
     text-align: center;
@@ -422,6 +431,7 @@ button {
     transform: translateY(-10px);
     border-color: var(--primary-color);
     box-shadow: var(--shadow-glow);
+    background: rgba(30, 30, 30, 0.8);
 }
 
 .contact-card i {
