@@ -168,13 +168,11 @@ button {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
     position: relative;
     overflow: hidden;
-    padding-top: 80px;
-    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-    /* Subtle radial for depth */
+    padding-top: 0;
+    /* Center vertically specifically */
+    background: radial-gradient(circle at 70% 50%, #1e1b4b 0%, #020617 50%, #000000 100%);
 }
 
 #canvas-container {
@@ -184,62 +182,73 @@ button {
     width: 100%;
     height: 100%;
     z-index: 1;
-    /* Behind content but above background */
-    opacity: 1;
-    /* More visible */
     pointer-events: none;
-    /* Let clicks pass through to buttons */
+    /* Allow clicks to pass through */
 }
 
 .hero-content {
     position: relative;
     z-index: 10;
-    /* Ensure content is above canvas */
-    max-width: 900px;
+    width: 100%;
+    max-width: 1200px;
+    /* Standard container width */
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: left;
+    /* Strict Left Align */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass to buttons */
+}
+
+.hero-content>* {
+    pointer-events: auto;
+    /* Re-enable pointer events for text/buttons */
+    max-width: 650px;
+    /* Limit text width to left side */
 }
 
 .hero-title {
-    font-size: 5rem;
-    margin-bottom: 1rem;
-    background: var(--gradient-text);
+    font-size: 5.5rem;
+    /* Massive Headline */
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* Standard property */
-    text-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
-    /* Violet shadow */
-}
-
-/* Light mode specific override for gradient text if needed */
-body:not(.dark-mode) .hero-title {
-    background: linear-gradient(to right, #0f172a, #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: none;
+    letter-spacing: -2px;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--text-color);
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #cbd5e1;
     margin-bottom: 1.5rem;
+    letter-spacing: -0.5px;
+    display: block;
 }
 
 .hero-description {
-    font-size: 1.1rem;
-    color: var(--text-light);
-    margin-bottom: 2.5rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 1.25rem;
+    color: #94a3b8;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    max-width: 550px;
 }
 
 .hero-buttons {
     display: flex;
     gap: 1.5rem;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Left align buttons */
 }
 
+/* Premium Buttons */
 .btn {
     padding: 1rem 2.5rem;
     border-radius: 50px;

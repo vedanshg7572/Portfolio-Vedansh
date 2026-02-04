@@ -64,116 +64,138 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =========================================
-       3D Hero Animation (Three.js)
+       3D Hero Animation (Three.js) - Liquid Tech Sculpture
        ========================================= */
     const canvasContainer = document.getElementById('canvas-container');
     if (canvasContainer) {
         // Scene setup
         const scene = new THREE.Scene();
+        // Fog for depth fading
+        scene.fog = new THREE.FogExp2(0x020617, 0.02);
+
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputEncoding = THREE.sRGBEncoding;
         canvasContainer.appendChild(renderer.domElement);
 
-        // Group to hold our object
-        const group = new THREE.Group();
-        scene.add(group);
+        // --- 1. The Tech Sculpture (Torus Knot) ---
+        const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 150, 20);
 
-        // 1. Icosahedron (The "Core")
-        const geometry = new THREE.IcosahedronGeometry(1.5, 1);
+        // Liquid/Glass Material
+        const material = new THREE.MeshPhysicalMaterial({
+            color: 0x3b82f6,      // Blue-ish base
+            metalness: 0.9,       // Very metallic
+            roughness: 0.1,       // Very smooth
+            transmission: 0.0,    // Solid metal
+            clearcoat: 1.0,       // High polish
+            clearcoatRoughness: 0.0,
+            emissive: 0x1e1b4b,   // Slight deep glow
+            emissiveIntensity: 0.2
+        });
 
-        // Wireframe Style
-        const wireframeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x8b5cf6, // Violet
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // --- 2. Wireframe Overlay (Tech Feel) ---
+        const wireGeo = new THREE.TorusKnotGeometry(1.21, 0.41, 150, 20); // Slightly larger
+        const wireMat = new THREE.MeshBasicMaterial({
+            color: 0x22d3ee, // Cyan Neon
             wireframe: true,
             transparent: true,
-            opacity: 0.15
+            opacity: 0.1
         });
-        const wireframeMesh = new THREE.Mesh(geometry, wireframeMaterial);
-        group.add(wireframeMesh);
+        const wireMesh = new THREE.Mesh(wireGeo, wireMat);
+        scene.add(wireMesh);
 
-        // Particles on vertices
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = geometry.attributes.position.count;
-        const posArray = new Float32Array(particlesCount * 3);
+        // --- 3. Lighting (Cinematic) ---
+        const ambientLight = new THREE.AmbientLight(0x020617, 1.0);
+        scene.add(ambientLight);
 
-        // Copy vertex positions
-        for (let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = geometry.attributes.position.array[i];
+        // Main Key Light (Blue/Violet)
+        const spotLight = new THREE.SpotLight(0x8b5cf6, 10);
+        spotLight.position.set(5, 10, 5);
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.5;
+        scene.add(spotLight);
+
+        // Rim Light (Cyan)
+        const rimLight = new THREE.PointLight(0x22d3ee, 5);
+        rimLight.position.set(-5, 5, -5);
+        scene.add(rimLight);
+
+        // Fill Light (Pink)
+        const fillLight = new THREE.PointLight(0xec4899, 2);
+        fillLight.position.set(0, -5, 5);
+        scene.add(fillLight);
+
+        // Camera Positioning (Look slightly right)
+        camera.position.z = 6;
+
+        // Adjust object position based on screen width
+        // Move object to the right for desktop, center for mobile
+        function updateLayout() {
+            if (window.innerWidth > 1024) {
+                mesh.position.x = 2.5;
+                wireMesh.position.x = 2.5;
+            } else {
+                mesh.position.x = 0;
+                wireMesh.position.x = 0;
+            }
         }
+        updateLayout();
 
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.06,
-            color: 0x22d3ee, // Cyan
-            transparent: true,
-            opacity: 0.9,
-            map: null
-        });
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        group.add(particlesMesh);
-
-        // 2. Floating Background Particles (Stars)
-        const starGeo = new THREE.BufferGeometry();
-        const starCount = 300;
-        const starPos = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount * 3; i++) {
-            starPos[i] = (Math.random() - 0.5) * 30; // Wide spread
-        }
-        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-        const starMat = new THREE.PointsMaterial({
-            size: 0.03,
-            color: 0xec4899, // Pink accents
-            transparent: true,
-            opacity: 0.3
-        });
-        const starMesh = new THREE.Points(starGeo, starMat);
-        scene.add(starMesh);
-
-        // Add a second wireframe for depth (Cyan)
-        const innerGeo = new THREE.IcosahedronGeometry(1.0, 0);
-        const innerMat = new THREE.MeshBasicMaterial({
-            color: 0x22d3ee,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.05
-        });
-        const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-        group.add(innerMesh);
-
-        camera.position.z = 5;
-
-        // Mouse interaction
+        // Mouse Interaction
         let mouseX = 0;
         let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        // Window half
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
 
         document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            mouseX = (event.clientX - windowHalfX) * 0.001;
+            mouseY = (event.clientY - windowHalfY) * 0.001;
         });
 
         // Animation Loop
         const clock = new THREE.Clock();
 
         const animate = () => {
-            const elapsedTime = clock.getElapsedTime();
+            const time = clock.getElapsedTime();
 
-            // Rotate the main group (Core)
-            group.rotation.y = elapsedTime * 0.1;
-            group.rotation.x = Math.sin(elapsedTime * 0.2) * 0.2;
+            // Smooth mouse follow
+            targetX = mouseX * 0.5;
+            targetY = mouseY * 0.5;
 
-            // Parallax the group based on mouse
-            group.rotation.y += mouseX * 0.1;
-            group.rotation.x += mouseY * 0.1;
+            // 1. Rotation (Continuous + Mouse)
+            // Main rotation
+            mesh.rotation.x += 0.002;
+            mesh.rotation.y += 0.005;
+            wireMesh.rotation.x += 0.002;
+            wireMesh.rotation.y += 0.005;
 
-            // Subtle breathing effect
-            const scale = 1 + Math.sin(elapsedTime * 0.5) * 0.05;
-            group.scale.set(scale, scale, scale);
+            // Parallax Tilt based on mouse
+            mesh.rotation.x += (mouseY - mesh.rotation.x) * 0.05;
+            mesh.rotation.y += (mouseX - mesh.rotation.y) * 0.05;
 
-            // Rotate background stars slowly
-            starMesh.rotation.y = elapsedTime * 0.02;
+            // 2. Floating (Levitation)
+            const floatY = Math.sin(time * 0.8) * 0.2; // Move up and down
+            const baseY = 0; // Center Y
+
+            // Apply layout X position plus float
+            if (window.innerWidth > 1024) {
+                mesh.position.y = baseY + floatY;
+                wireMesh.position.y = baseY + floatY;
+            } else {
+                mesh.position.y = baseY + floatY;
+                wireMesh.position.y = baseY + floatY;
+            }
 
             renderer.render(scene, camera);
             window.requestAnimationFrame(animate);
@@ -186,33 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            updateLayout();
         });
-
-        // Theme update listener
-        const updateColors = () => {
-            const isDark = document.body.classList.contains('dark-mode');
-            if (isDark) {
-                wireframeMaterial.color.setHex(0x8b5cf6); // Violet
-                particlesMaterial.color.setHex(0x22d3ee); // Cyan
-                starMat.color.setHex(0xec4899); // Pink
-                innerMat.color.setHex(0x22d3ee);
-            } else {
-                wireframeMaterial.color.setHex(0x2563eb);
-                particlesMaterial.color.setHex(0x2563eb);
-                starMat.color.setHex(0x94a3b8);
-                innerMat.color.setHex(0x2563eb);
-            }
-        };
-
-        // Initial check
-        if (document.body.classList.contains('dark-mode')) updateColors();
-
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                setTimeout(updateColors, 100);
-            });
-        }
     }
 
     /* =========================================
