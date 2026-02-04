@@ -1,26 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================================
-       Cursor Magic
+       Cursor Magic (Smooth Trail + Magnet)
        ========================================= */
     const cursorDot = document.querySelector('[data-cursor-dot]');
     const cursorOutline = document.querySelector('[data-cursor-outline]');
 
-    // Mouse movement
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+
+    // Mouse movement updates target position
     window.addEventListener('mousemove', function (e) {
-        const posX = e.clientX;
-        const posY = e.clientY;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
 
-        // Dot follows instantly
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
-
-        // Outline follows with lag (animation in CSS or simple lerp here)
-        cursorOutline.animate({
-            left: `${posX}px`,
-            top: `${posY}px`
-        }, { duration: 500, fill: "forwards" });
+        // Dot follows instantly (centered)
+        cursorDot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`; // -4 is half width
     });
+
+    // Smooth trailing animation loop
+    function animateCursor() {
+        const speed = 0.15; // Delay factor
+
+        outlineX += (mouseX - outlineX) * speed;
+        outlineY += (mouseY - outlineY) * speed;
+
+        // Outline follows with lag (centered)
+        cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px)`; // -20 is half width
+
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
 
     // Hover Effects
     const hoverElements = document.querySelectorAll('a, button, .project-card, .contact-card');
@@ -33,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Magnetic Effect for Buttons
+    // Magnetic Effect (Enhanced)
     const magnetButtons = document.querySelectorAll('.magnet-effect');
     magnetButtons.forEach(btn => {
         btn.addEventListener('mousemove', function (e) {
@@ -41,7 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            // Move button towards mouse
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+
+            // Optional: Move cursor outline slightly to emphasize pull (magnet feel)
+            // But we keep it simple to avoid conflict with trail loop
         });
 
         btn.addEventListener('mouseleave', function () {

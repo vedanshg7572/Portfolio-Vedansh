@@ -1,46 +1,50 @@
 /* Custom Cursor */
 .cursor-dot {
-    width: 5px;
-    height: 5px;
-    background-color: var(--primary-color);
     position: fixed;
     top: 0;
     left: 0;
-    transform: translate(-50%, -50%);
+    width: 8px;
+    /* Slightly larger for better visibility */
+    height: 8px;
+    background-color: var(--primary-color);
     border-radius: 50%;
     z-index: 9999;
     pointer-events: none;
+    /* Removed translate here as it's handled in JS */
 }
 
 .cursor-outline {
-    width: 30px;
-    height: 30px;
-    border: 2px solid var(--primary-color);
     position: fixed;
     top: 0;
     left: 0;
-    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* Semi-transparent white */
     border-radius: 50%;
     z-index: 9998;
     pointer-events: none;
-    transition: width 0.2s, height 0.2s, background-color 0.2s;
+    transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s, transform 0.1s;
+    /* Adjusted transitions */
 }
 
 /* Hover effect for links and buttons */
 body.hovering .cursor-outline {
-    width: 50px;
-    height: 50px;
-    background-color: rgba(37, 99, 235, 0.1);
+    width: 60px;
+    /* Larger scale */
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.1);
     border-color: transparent;
+    border-width: 2px;
 }
 
-/* Dark mode adjustments for cursor */
+/* Dark mode adjustments - kept simple as white/transparent works well on dark */
 .dark-mode .cursor-dot {
     background-color: var(--secondary-color);
 }
 
 .dark-mode .cursor-outline {
-    border-color: var(--secondary-color);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Hide on touch devices */
