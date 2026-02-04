@@ -1,43 +1,41 @@
 /* Global Styles */
 :root {
-    --primary-color: #3b82f6;
-    /* Premium Blue */
-    --secondary-color: #8b5cf6;
-    /* Violet */
-    --accent-color: #ec4899;
-    /* Pink */
-    --gradient-text: linear-gradient(to right, #22d3ee, #8b5cf6, #ec4899);
-    /* Cyan -> Violet -> Pink */
-    --bg-color: #030712;
-    /* Richer Deep Black/Navy */
-    --bg-light: #111827;
-    /* Gray 900 */
-    --text-color: #f8fafc;
-    /* Slate 50 */
-    --text-light: #94a3b8;
-    /* Slate 400 */
-    --glass-bg: rgba(17, 24, 39, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
-    /* Violet glow */
+    --primary-color: #ffffff;
+    /* White High Contrast */
+    --secondary-color: #cccccc;
+    /* Light Gray */
+    --accent-color: #ffffff;
+    --gradient-text: linear-gradient(to right, #ffffff, #999999);
+    /* White -> Gray */
+    --bg-color: #000000;
+    /* Pure Black */
+    --bg-light: #111111;
+    /* Very dark gray */
+    --text-color: #ffffff;
+    --text-light: #aaaaaa;
+    --glass-bg: rgba(20, 20, 20, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.9);
+    --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.1);
+    /* White Glow */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Light Mode Variables (Optional, but prioritizing Dark) */
+/* Light Mode Override - Force Dark Mode look essentially, or inverted */
 body:not(.dark-mode) {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --bg-color: #f8fafc;
-    --bg-light: #ffffff;
-    --text-color: #0f172a;
-    --text-light: #64748b;
-    --glass-bg: rgba(255, 255, 255, 0.8);
-    --glass-border: rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.1);
+    /* We want to force black theme always based on user request "pura black" */
+    --primary-color: #ffffff;
+    --secondary-color: #cccccc;
+    --bg-color: #000000;
+    --bg-light: #111111;
+    --text-color: #ffffff;
+    --text-light: #aaaaaa;
+    --glass-bg: rgba(20, 20, 20, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.9);
+    --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 * {
